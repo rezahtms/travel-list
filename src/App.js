@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./App.css";
 const initialItems = [
   { id: 1, description: "Passports", quantity: 2, packed: false },
@@ -20,9 +21,22 @@ const Logo = () => {
 };
 
 const Form = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    //  .....
+  };
   return (
-    <form className="add-form">
+    <form className="add-form" onSubmit={handleSubmit}>
       <h3>What Do You Need For Your 😍 Trip?</h3>
+      <input type="text" placeholder="item..." />
+      <select>
+        {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+          <option value={num} key={num}>
+            {num}
+          </option>
+        ))}
+      </select>
+      <button type="submit">ADD</button>
     </form>
   );
 };
