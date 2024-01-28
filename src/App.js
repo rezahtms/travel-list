@@ -1,4 +1,8 @@
 import "./App.css";
+const initialItems = [
+  { id: 1, description: "Passports", quantity: 2, packed: false },
+  { id: 2, description: "Socks", quantity: 12, packed: false },
+];
 
 function App() {
   return (
@@ -24,7 +28,26 @@ const Form = () => {
 };
 
 const PackingList = () => {
-  return <div className="list">List</div>;
+  return (
+    <div className="list">
+      <ul>
+        {initialItems.map((item) => (
+          <Item item={item} key={item.id} />
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const Item = ({ item }) => {
+  return (
+    <li>
+      <span style={{ textDecoration: item.packed ? "line-through" : "none" }}>
+        {item.quantity} {item.description}
+      </span>
+      <button>❌</button>
+    </li>
+  );
 };
 
 const Stats = () => {
