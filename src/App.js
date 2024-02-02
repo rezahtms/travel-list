@@ -1,9 +1,5 @@
 import { useState } from "react";
 import "./App.css";
-const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 12, packed: false },
-];
 
 function App() {
   const [item, setItem] = useState([]);
@@ -11,11 +7,19 @@ function App() {
   function handleAddItem(newItem) {
     setItem((current) => [...current, newItem]);
   }
+
+  function handleDeleteItem(id) {
+    const confirmDelete = window.confirm(
+      `are you sure delete item with id ${id}?`
+    );
+    if (confirmDelete)
+      setItem((current) => current.filter((item) => item.id !== id));
+  }
   return (
     <div className="app">
       <Logo />
       <Form handleAddItem={handleAddItem} />
-      <PackingList item={item} />
+      <PackingList item={item} onHandleDeleteItem={handleDeleteItem} />
       <Stats />
     </div>
   );
@@ -59,25 +63,29 @@ const Form = ({ handleAddItem }) => {
   );
 };
 
-const PackingList = ({ item }) => {
+const PackingList = ({ item, onHandleDeleteItem }) => {
   return (
     <div className="list">
       <ul>
         {item.map((item) => (
-          <Item item={item} key={item.id} />
+          <Item
+            item={item}
+            key={item.id}
+            onHandleDeleteItem={onHandleDeleteItem}
+          />
         ))}
       </ul>
     </div>
   );
 };
 
-const Item = ({ item }) => {
+const Item = ({ item, onHandleDeleteItem }) => {
   return (
     <li>
       <span style={{ textDecoration: item.packed ? "line-through" : "none" }}>
         {item.quantity} {item.description}
       </span>
-      <button>❌</button>
+      <button onClick={() => onHandleDeleteItem(item.id)}>❌</button>
     </li>
   );
 };
