@@ -77,10 +77,27 @@ const Form = ({ handleAddItem }) => {
 };
 
 const PackingList = ({ item, onHandleDeleteItem, handleTogglePacked }) => {
+  const [sortedBy, setSortedBy] = useState("input");
+  let sortedItems;
+  switch (sortedBy) {
+    case "input":
+      sortedItems = item;
+      break;
+    case "description":
+      sortedItems = item
+        .slice()
+        .sort((a, b) => a.description.localeCompare(b.description));
+      break;
+    case "packed":
+      sortedItems = item
+        .slice()
+        .sort((a, b) => Number(a.packed) - Number(b.packed));
+      break;
+  }
   return (
     <div className="list">
       <ul>
-        {item.map((item) => (
+        {sortedItems.map((item) => (
           <Item
             item={item}
             onHandleDeleteItem={onHandleDeleteItem}
@@ -89,6 +106,16 @@ const PackingList = ({ item, onHandleDeleteItem, handleTogglePacked }) => {
           />
         ))}
       </ul>
+      <div className="actions">
+        <select
+          value={sortedBy}
+          onChange={(event) => setSortedBy(event.target.value)}
+        >
+          <option value="input">Sorted by Input</option>
+          <option value="description">Sorted by Description</option>
+          <option value="packed">Sorted by Packed</option>
+        </select>
+      </div>
     </div>
   );
 };
