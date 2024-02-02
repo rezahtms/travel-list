@@ -24,6 +24,11 @@ function App() {
     );
   }
 
+  function handleClearList() {
+    const confirmClearList = window.confirm("Are You Sure Clear item's list?");
+    if (confirmClearList) setItem([]);
+  }
+
   return (
     <div className="app">
       <Logo />
@@ -32,6 +37,7 @@ function App() {
         item={item}
         onHandleDeleteItem={handleDeleteItem}
         handleTogglePacked={handleTogglePacked}
+        onHandleClearList={handleClearList}
       />
       <Stats items={item} />
     </div>
@@ -76,7 +82,12 @@ const Form = ({ handleAddItem }) => {
   );
 };
 
-const PackingList = ({ item, onHandleDeleteItem, handleTogglePacked }) => {
+const PackingList = ({
+  item,
+  onHandleDeleteItem,
+  handleTogglePacked,
+  onHandleClearList,
+}) => {
   const [sortedBy, setSortedBy] = useState("input");
   let sortedItems;
   switch (sortedBy) {
@@ -106,16 +117,19 @@ const PackingList = ({ item, onHandleDeleteItem, handleTogglePacked }) => {
           />
         ))}
       </ul>
-      <div className="actions">
-        <select
-          value={sortedBy}
-          onChange={(event) => setSortedBy(event.target.value)}
-        >
-          <option value="input">Sorted by Input</option>
-          <option value="description">Sorted by Description</option>
-          <option value="packed">Sorted by Packed</option>
-        </select>
-      </div>
+      {item.length !== 0 && (
+        <div className="actions">
+          <select
+            value={sortedBy}
+            onChange={(event) => setSortedBy(event.target.value)}
+          >
+            <option value="input">Sorted by Input</option>
+            <option value="description">Sorted by Description</option>
+            <option value="packed">Sorted by Packed</option>
+          </select>
+          <button onClick={onHandleClearList}>Clear List</button>
+        </div>
+      )}
     </div>
   );
 };
